@@ -6,8 +6,33 @@ use Illuminate\Http\Request;
 use App\Models\Activity;
 use App\Models\Organization;
 
+/**
+ * @OA\Info(
+ *     version="1.0.0",
+ *     title="API Документация",
+ *     description="API для работы с деятельностями"
+ * )
+ *
+ * @OA\Server(
+ *     url="/api",
+ *     description="API сервер"
+ * )
+ */
+
 class ActivityController extends Controller
 {
+    /**
+     * @OA\Get(
+     *     path="/activities/limited",
+     *     summary="Получение ограниченных деятельностей с глубиной <= 3",
+     *     tags={"Activities"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Успешный ответ",
+     *         @OA\JsonContent(type="array", @OA\Items(ref="#/components/schemas/Activity"))
+     *     )
+     * )
+     */
 
     // Ограничение уровня вложенности деятельностей (до 3)
     public function getLimited()

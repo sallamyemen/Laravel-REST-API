@@ -37,7 +37,7 @@ Route::get('organizations/{organization}', [OrganizationController::class, 'show
 // Поиск организаций по виду деятельности (включая вложенные виды)
 Route::get('activities/{activity}/organizations/recursive', [OrganizationController::class, 'getByActivityRecursive']);
 //Поиск организации по названию
-Route::get('organizations/search', [OrganizationController::class, 'searchByName']);
+Route::post('organizations/search', [OrganizationController::class, 'searchByName']);
 //Ограничение уровня вложенности деятельностей (до 3)
 Route::get('activities/limited', [ActivityController::class, 'getLimited']);
 
