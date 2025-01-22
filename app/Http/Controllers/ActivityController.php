@@ -6,19 +6,6 @@ use Illuminate\Http\Request;
 use App\Models\Activity;
 use App\Models\Organization;
 
-/**
- * @OA\Info(
- *     version="1.0.0",
- *     title="API Документация",
- *     description="API для работы с деятельностями"
- * )
- *
- * @OA\Server(
- *     url="/api",
- *     description="API сервер"
- * )
- */
-
 class ActivityController extends Controller
 {
     /**

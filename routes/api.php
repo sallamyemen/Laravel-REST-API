@@ -40,6 +40,8 @@ Route::get('activities/{activity}/organizations/recursive', [OrganizationControl
 Route::post('organizations/search', [OrganizationController::class, 'searchByName']);
 //Ограничение уровня вложенности деятельностей (до 3)
 Route::get('activities/limited', [ActivityController::class, 'getLimited']);
-
+Route::get('/api/documentation', function () {
+    return view('swagger.index');
+});
 
 

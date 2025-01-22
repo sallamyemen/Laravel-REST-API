@@ -35,7 +35,7 @@ return [
                  */
                 'docs_yaml' => 'api-docs.yaml',
 
-                'docs' => 'api/documentation', // URL для JSON-документации
+                'docs' => storage_path('api-docs'),// URL для JSON-документации
 
                 /*
                  * Set this to `json` or `yaml` to determine which documentation file to use in UI
@@ -45,9 +45,7 @@ return [
                 /*
                  * Absolute paths to directory containing the swagger annotations are stored.
                  */
-                'annotations' => [
-                    base_path('app'),
-                ],
+                'annotations' => base_path('app'),
                 'middleware' => [ // Middleware для Swagger UI
                     'api',
                 ],
