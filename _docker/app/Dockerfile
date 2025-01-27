@@ -1,43 +1,24 @@
-# Используем официальный PHP-образ
 FROM php:8.2-fpm
 
-# Установим зависимости системы
 RUN apt-get update && apt-get install -y \
-    git \
-    unzip \
-    curl \
-    libpq-dev \
-    libzip-dev \
-    zip \
-    && docker-php-ext-install pdo_mysql zip
+      apt-utils \
+      libpq-dev \
+      libpng-dev \
+      libzip-dev \
+      zip unzip \
+      git && \
+      docker-php-ext-install pdo_mysql && \
+      docker-php-ext-install bcmath && \
+      docker-php-ext-install gd && \
+      docker-php-ext-install zip && \
+      apt-get clean && \
+      rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# Установка Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+COPY ./_docker/app/php.ini /usr/local/etc/php/conf.d/php.ini
 
-# Установка Node.js (если используется для фронтенда)
-RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
-    && apt-get install -y nodejs
+ENV COMPOSER_ALLOW_SUPERUSER=1
+RUN curl -sS https://getcomposer.org/installer | php -- \
+    --filename=composer \
+    --install-dir=/usr/local/bin
 
-# Копирование приложения в контейнер
-WORKDIR /var/www/html
-COPY . .
-
-# Установим зависимости Laravel
-RUN composer install --optimize-autoloader --no-dev
-
-RUN apt-get update && apt-get install -y \
-    default-mysql-client \
-    && rm -rf /var/lib/apt/lists/*
-
-# Права для хранения кэшей и логов
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
-
-# Установка начальных параметров
-RUN php artisan config:clear \
-    && php artisan cache:clear
-
-# Открытие порта
-EXPOSE 8000
-
-# Запуск приложения
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
+WORKDIR /var/www

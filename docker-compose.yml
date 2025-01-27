@@ -1,26 +1,39 @@
+version: '3.8'
+
 services:
+    nginx:
+        image: nginx:latest
+        volumes:
+            - ./:/var/www
+            - ./_docker/nginx/conf.d:/etc/nginx/conf.d
+        ports:
+            - "8876:80"
+        depends_on:
+            - app
+        container_name: project_nginx
+
     app:
         build:
             context: .
+            dockerfile: _docker/app/Dockerfile
+        container_name: laravel_app
+        volumes:
+            - ./:/var/www
         depends_on:
             - db
-        environment:
-            DB_CONNECTION: mysql
-            DB_HOST: db
-            DB_PORT: 3306
-            DB_DATABASE: laravel
-            DB_USERNAME: root
-            DB_PASSWORD: ""
-        ports:
-            - "8000:80"
 
     db:
-        image: mysql:latest
+        image: mysql:8.0
+        container_name: mysql_db
+        restart: always
         environment:
-            MYSQL_ROOT_PASSWORD: ""
             MYSQL_DATABASE: laravel
+            MYSQL_ROOT_PASSWORD: root
         volumes:
-            - db_data:/var/lib/mysql
+            - ./tmp/db:/var/lib/mysql
+        ports:
+            - "8101:3306"
+        command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
 
 volumes:
     db_data:
